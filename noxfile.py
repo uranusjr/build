@@ -27,3 +27,10 @@ def test(session):
                 f'--cov-report=html:{htmlcov_output}',
                 f'--cov-report=xml:{xmlcov_output}',
                 'tests/', *session.posargs)
+
+
+@nox.session(python=['2.7', '3.5', '3.6', '3.7', '3.8', 'pypy2', 'pypy3'])
+def integration(session):
+    session.install('.[test]')
+
+    session.run('pytest', '--only-integration')
