@@ -32,7 +32,12 @@ _WHEEL = re.compile('.*.whl')
 def test_build(tmpdir, integration_path, project, args):
     os.environ['SETUPTOOLS_SCM_PRETEND_VERSION'] = 'dummy'  # for the projects that use setuptools_scm
 
-    build.__main__.main([os.path.join(integration_path, project), '-o', tmpdir] + args)
+    if project == 'python-build':  # windows does not support symlinks
+        path = os.path.abspath(os.path.join(__file__, '..', '..'))
+    else:
+        path = os.path.join(integration_path, project)
+
+    build.__main__.main([path, '-o', tmpdir] + args)
 
     assert filter(_SDIST.match, os.listdir(tmpdir))
     assert filter(_WHEEL.match, os.listdir(tmpdir))
