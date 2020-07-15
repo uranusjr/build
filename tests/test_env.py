@@ -11,7 +11,7 @@ import build.env
 def test_isolated_environment(mocker):
     with build.env.IsolatedEnvironment() as env:
         if os.name != 'nt':
-            assert os.environ['PATH'] == os.path.join(env._path, 'bin')
+            assert os.environ['PATH'].split(os.pathsep)[-1] == os.path.join(env._path, 'bin')
         assert os.environ['PYTHONHOME'] == env._path
 
         for path in ('purelib', 'platlib'):

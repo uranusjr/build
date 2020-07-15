@@ -67,7 +67,9 @@ class IsolatedEnvironment(object):
             if path in sys_path:
                 sys_path.remove(path)
 
-        self._replace_env('PATH', self._get_env_path('scripts'))
+        self._replace_env('PATH', os.pathsep.join(
+            filter(None, [os.environ.get('PATH', None), self._get_env_path('scripts')]))
+        )
         self._replace_env('PYTHONPATH', os.pathsep.join(sys_path))
         self._replace_env('PYTHONHOME', self._path)
 
