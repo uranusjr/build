@@ -25,6 +25,7 @@ def test_isolated_environment(mocker):
         env.install(['some', 'requirements'])
         if sys.version_info[:2] != (3, 5):
             subprocess.check_call.assert_called()
-        assert subprocess.check_call.call_args[0][0] == [
-            sys.executable, '-m', 'pip', 'install', '--ignore-installed', '--prefix', env._path, 'some', 'requirements'
+        args = subprocess.check_call.call_args[0][0]
+        assert args[:8] == [
+            sys.executable, '-m', 'pip', 'install', '--ignore-installed', '--prefix', env._path, '-r'
         ]
